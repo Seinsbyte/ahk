@@ -23,6 +23,10 @@ i::Up
 j::Left
 k::Down
 l::Right
+I::Up
+J::Left
+K::Down
+L::Right
 
 e::Send ^{Backspace}
 r::Send ^{Del}
@@ -32,8 +36,13 @@ z::Send ^{z}
 x::Send ^{x}
 c::Send ^{c}
 v::Send ^{v}
+
 u::Send ^{Left}
 o::Send ^{Right}
++u::Send +^{Left}
++o::Send +^{Right}
+
 y::Send ^{z}
 h::Home
 `;::End
+Backspace::Backspace

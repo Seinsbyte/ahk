@@ -31,7 +31,7 @@ $F20::Send !. ;delete  after cursor  (w)
 $F21::Send ^+{Enter} ;All done  (a)
 $F22::Send !x ;Show again (s)
 $F23::Send ^d ;dismiss (d)
-+^F7::Send !{F7}
+
 
 
 ;Windows Maps
