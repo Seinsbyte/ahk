@@ -1,4 +1,5 @@
 ;;; Remaps
+$F7::Send +{F7}
 $F15::Send ^{2} ; This is for deepl
 ; Ctrl::Alt
 ; Alt::Ctrl
@@ -49,7 +50,7 @@ $Numpad0::Send ^+t ;reopen last closed tab (q)
 
 ;;; Supermemo Maps
 
-#If WinActive("ahk_class TElWind") || WinActive("ahk_exe PluginHost.exe") || WinActive("ahk_class TContents")
+#If WinActive("ahk_class TElWind") || WinActive("ahk_exe PluginHost.exe") || WinActive("ahk_class TContents") || WinActive("ahk_class TStats")
 
 $Numpad2:: ; This is for adding a new topic to a specific concept 
 SetKeyDelay, 100
@@ -72,14 +73,14 @@ Winmove, ahk_class Emacs,,560,349,1024,450
 ; MouseMove, 1050,580
 return
 $Numpad4:: Send !c ;Go to position in tree
-$Numpad5::Send !{PgUp} ;Go to previous position in tree 
-$Numpad6::Send !{PgDn} ;Go to nextposition in tree 
+$Numpad5:: Send !{PgUp} ;Go to previous position in tree 
+$Numpad6:: Send !{PgDn} ;Go to nextposition in tree 
 $Numpad7::Send ^t ; Cycle between elements 
 $Numpad8::Send !{F1} ; New Task
 $Numpad9::Send !{Left} ;prev element 
 $Numpad0::Send ^d ;dismiss 
 $Numpad1::Send ^+{Enter} ;All done  
-$NumpadAdd::Send ^{Up}
+$NumpadAdd::Send ^{Up} ; goto parent
 $NumpadDot::Send ^{F7} ;Set read point
 $NumpadMult::Send !{F7} ; Go to read point
 $NumpadDiv::Send !{F12} ; Go to read point
@@ -92,92 +93,17 @@ $XButton1::Send !x ; show again
 $XButton2::Send !z ; Cloze
 
 $F13::Send ^{F13}
-$F14::Send ^{F14}
-; $F16::Send ^{F16}
-; $F17::Send ^{F17}
+$F14::
+CoordMode, Mouse, Screen  
+Mouseclick , Left, 1370, 333
+KeyWait, Tab, D
+Mouseclick, Left, 1906, 467
+Mouseclick, Left, 1790, 464
+WinActivate, ahk_class TElWind
+return 
+; $F16::Send ^{F16} ; being used for linking
+; $F17::Send ^{F17} ; being used for linking
 $F18::Send ^{F18}
-
-F12::
-ClipboardOld := ClipboardAll
-Clipboard := ""
-Send, q
-Send, ^a
-Send, ^c
-clipboard := clipboard  ; Converts clipboard into plain text
-cpa := Clipboard
-RegExReplace(cpa,"\«","",count)
-Clipboard := ClipboardOld
-ClipboardOld := ""
-Send, {Right}
-Send, ^{Home}
-Loop, %count%
-{
-    ClipboardOld := ClipboardAll
-    Clipboard := ""
-    InsertPoint := 0
-    InsertPoint2 := 0
-    ClipboardFirst := ""
-        Length := 0
-          Loop
-    {
-        Send, ^+{Right}
-        A_Index2 := A_Index
-        Send, ^c
-        Sleep, 20
-        Length := StrLen(Clipboard)
-        InsertPoint := RegExMatch(Clipboard,"[\«]")
-        ;MsgBox, InsertPoint %InsertPoint% ; for debugging
-        If (InsertPoint = 0) 
-        {
-            If (A_Index2 >= 100)
-            {
-                break
-            }
-            continue
-        }
-        else
-        {
-            break
-        }
-    }
-Send, {Right}
-        Loop
-    {
-        Send, ^+{Right}
-        A_Index2 := A_Index
-        Send, ^c
-        Sleep, 20
-        Length := StrLen(Clipboard)
-        InsertPoint := RegExMatch(Clipboard,"[\»]")
-        ;MsgBox, InsertPoint %InsertPoint% ; for debugging
-        If (InsertPoint = 0) 
-        {
-            If (A_Index2 >= 100)
-            {
-                break
-            }
-            continue
-        }
-        else
-        {
-            break
-        }
-    }
-    ; Since we may overshoot the . or other special character by use of Ctrl + -> in Windows
-    ; we have to Shift + <- back by how much we overshot
-    If(InsertPoint > 0 && InsertPoint <> Length)
-    {
-     GoLeftBy := Length - InsertPoint
-     Loop %GoLeftBy%
-     {
-        Send, +{Left}
-     }
-    }
-        send !z
-    Clipboard := ClipboardOld
-    ClipboardOld := ""
-}
-return
 
 ; #If WinActive("ahk_class TContents")
 ; $i:: Send {Up}

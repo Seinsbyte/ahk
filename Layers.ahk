@@ -1,7 +1,7 @@
 I_Icon = H:\programs\ahk\Icons\bluei.ico
 C_Icon = H:\programs\ahk\Icons\greenc.ico  
 
-Esc::
+RCtrl::
 KeyDown := !KeyDown
 If KeyDown
 {
@@ -31,8 +31,8 @@ L::Right
 e::Send ^{Backspace}
 r::Send ^{Del}
 n::Send ^{f}
-d::Send Backspace
-z::Send ^{z}
+d::Send {Backspace}
+z::Send +{z}
 x::Send ^{x}
 c::Send ^{c}
 v::Send ^{v}
