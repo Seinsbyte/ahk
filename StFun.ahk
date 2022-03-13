@@ -3,33 +3,33 @@ $F7::Send +{F7}
 $F15::Send ^{2} ; This is for deepl
 ; Ctrl::Alt
 ; Alt::Ctrl
-Capslock::Esc
-Esc::Capslock
+; Capslock::Esc
+; Esc::Capslock
 
-; Invert the number row:
-$1:: Send {!}
-$2:: Send {@}
-$3:: Send {#}
-$4:: Send {Backspace}
-$5:: Send {`%}
-$6:: Send {^}
-$7:: Send {&}
-$8:: Send {*}
-$9:: Send {(}
-$0:: Send {)}
+; ; Invert the number row:
+; $1:: Send {!}
+; $2:: Send {@}
+; $3:: Send {#}
+; $4:: Send {Backspace}
+; $5:: Send {`%}
+; $6:: Send {^}
+; $7:: Send {&}
+; $8:: Send {*}
+; $9:: Send {(}
+; $0:: Send {)}
 
-$Backspace:: Send {~}
-$~:: Send {$}
-$!:: Send {1}
-$@:: Send {2}
-$#:: Send {3}
-$$:: Send {4}
-$%:: Send {5}
-$^:: Send {6}
-$&:: Send {7}
-$*:: Send {8}
-$(:: Send {9}
-$):: Send {0}
+; $Backspace:: Send {~}
+; $~:: Send {$}
+; $!:: Send {1}
+; $@:: Send {2}
+; $#:: Send {3}
+; $$:: Send {4}
+; $%:: Send {5}
+; $^:: Send {6}
+; $&:: Send {7}
+; $*:: Send {8}
+; $(:: Send {9}
+; $):: Send {0}
 
 ; LControl & RAlt::Alt 
 $RWin:: Send {AppsKey}
@@ -93,7 +93,7 @@ $XButton1::Send !x ; show again
 $XButton2::Send !z ; Cloze
 
 $F13::Send ^{F13}
-$F14::
+$F14::    ;Change root concept
 CoordMode, Mouse, Screen  
 Mouseclick , Left, 1370, 333
 KeyWait, Tab, D
@@ -162,11 +162,19 @@ $F10::switchToFoxit()
 ; $Numpad5::Send {Up} ;Go to previous position in tree 
 ; $Numpad6::Send !{PgDn} ;Go to nextposition in tree 
 $Numpad7::
+#IfWinExist ahk_class Qt5QWindowIcon
 SetKeyDelay, 5
 WinActivate, ahk_class Qt5QWindowIcon
-Send, {Space down}{Space up}
+Send, {Space}
 WinActivate, ahk_class Emacs
+; #IfWinExist ahk_class classFoxitReader
+; SetKeyDelay, 5
+; WinActivate, ahk_class classFoxitReader
+; Send, {Space}
+; WinActivate, ahk_class Emacs
+Send, ^{g}
 return
+  
 ; $Numpad8::Send !{F1} ; New Task
 ; $Numpad9::Send !{Left} ;prev element 
 ; $NumpadAdd::Send !x ;Show again (add to list)
