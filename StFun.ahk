@@ -1,12 +1,40 @@
-;;; Remaps
-$F7::Send +{F7}
-$F15::Send ^{2} ; This is for deepl
+﻿;;; Remaps
+
+#s::
+ringS := "ß"
+send, %ringS%
+return
+
+; $F7::Send +{F7}
+$F7::Send +!{b}
+  $F19::
+Send ^c                       ; For best compatibility: SendPlay
+Clipboard := StrReplace(Clipboard, "ſ","s")
+StringReplace, Clipboard, Clipboard, `r`n,%A_Space%, All
+launchOrSwitchDeepl()
+WinWaitActive, DeepL
+; CoordMode, Mouse, Screen  
+Mouseclick , Left, 400, 210
+; Sleep 1000
+Send ^a
+Send ^v
+return
 ; Ctrl::Alt
 ; Alt::Ctrl
 ; Capslock::Esc
 ; Esc::Capslock
+#v::                            ; Text–only paste from ClipBoard
+   Clip0 = %ClipBoardAll%
+   ClipBoard = %ClipBoard%       ; Convert to text
+Sleep 50                      ; Don't change clipboard while it is pasted! (Sleep > 0)
+   Send ^v                       ; For best compatibility: SendPlay
+   Sleep 50                      ; Don't change clipboard while it is pasted! (Sleep > 0)
+   ClipBoard = %Clip0%           ; Restore original ClipBoard
+   VarSetCapacity(Clip0, 0)      ; Free memory
+Return
 
-; ; Invert the number row:
+  
+  ; ; Invert the number row:
 ; $1:: Send {!}
 ; $2:: Send {@}
 ; $3:: Send {#}
@@ -31,11 +59,14 @@ $F15::Send ^{2} ; This is for deepl
 ; $(:: Send {9}
 ; $):: Send {0}
 
+$PgUp:: Send {\}
+  
 ; LControl & RAlt::Alt 
 $RWin:: Send {AppsKey}
 
 ;;; BRAVE MAPS
 #ifWinactive, ahk_class Chrome_WidgetWin_1
+#ifWinactive, ahk_class MozillaWindowClass
 $Numpad1::Send !{Left}
 $Numpad2::Send !{Right}
 $Numpad3::Send ^l ;go to Address bar (a)
@@ -90,20 +121,24 @@ Sleep, 150
 Send, !{Right}
 return
 $XButton1::Send !x ; show again
-$XButton2::Send !z ; Cloze
+; $XButton2::
+  ; Send, {Del}
+  ; Send, {Space}
+; Return
 
-$F13::Send ^{F13}
-$F14::    ;Change root concept
-CoordMode, Mouse, Screen  
-Mouseclick , Left, 1370, 333
-KeyWait, Tab, D
-Mouseclick, Left, 1906, 467
-Mouseclick, Left, 1790, 464
-WinActivate, ahk_class TElWind
-return 
+
+; $F13::Send ^{F13}
+; $F14::    ;Change root concept
+; CoordMode, Mouse, Screen  
+; Mouseclick , Left, 1370, 333
+; KeyWait, Tab, D
+; Mouseclick, Left, 1906, 467
+; Mouseclick, Left, 1790, 464
+; WinActivate, ahk_class TElWind
+; return 
 ; $F16::Send ^{F16} ; being used for linking
 ; $F17::Send ^{F17} ; being used for linking
-$F18::Send ^{F18}
+; $F18::Send ^{F18}
 
 ; #If WinActive("ahk_class TContents")
 ; $i:: Send {Up}
@@ -133,6 +168,14 @@ send ^k
 WinWaitActive, ahk_class Internet Explorer_TridentDlgFrame,, 2  ; a bit more delay since everybody knows how slow IE can be
 sendinput %hyperlink%
 send {enter}
+
+return
+
+$F18::
+  Mouseclick, Left
+  Send, {Del}
+  Send, {Space}
+  Send, {Del}
 return
 
 ;;; Windows Maps
@@ -141,13 +184,19 @@ $F1::toggleMaxWindow()
 $F2::Send !{Tab}
 $F3::Send #{Down}
 $F4::Send !{F4}
-$F5::launchOrSwitchBrave()
+; $F5::launchOrSwitchBrave()
+$F5::launchOrSwitchFirefox()
 $F6::launchOrSwitchSupermem()
 ; F7 opens launchy
 $F8::switchToEmacs()
-$F9::switchToExplorer()
+$F9::switchToFoxit()
+$F10::switchToExplorer()
 ; $F10::launchOrSwitchFoxit()
-$F10::switchToFoxit()
+$F11::Send #{Tab}
+$F12::
+Send, ^{c}
+Send, ^+{c}
+return
 
 ;;; Emacs maps
 #ifWinactive, ahk_class Emacs
@@ -162,16 +211,22 @@ $F10::switchToFoxit()
 ; $Numpad5::Send {Up} ;Go to previous position in tree 
 ; $Numpad6::Send !{PgDn} ;Go to nextposition in tree 
 $Numpad7::
+; #IfWinExist ahk_class AcrobatSDIWindow
+; SetKeyDelay, 5
+; WinActivate, ahk_class AcrobatSDIWindow
+; Send, {Space}
+; WinActivate, ahk_class Emacs
+; Send, ^{g}
 #IfWinExist ahk_class Qt5QWindowIcon
 SetKeyDelay, 5
 WinActivate, ahk_class Qt5QWindowIcon
 Send, {Space}
 WinActivate, ahk_class Emacs
-; #IfWinExist ahk_class classFoxitReader
-; SetKeyDelay, 5
-; WinActivate, ahk_class classFoxitReader
-; Send, {Space}
-; WinActivate, ahk_class Emacs
+#IfWinExist ahk_class classFoxitReader
+SetKeyDelay, 5
+WinActivate, ahk_class classFoxitReader
+Send, {Space}
+WinActivate, ahk_class Emacs
 Send, ^{g}
 return
   
@@ -217,6 +272,22 @@ Else
 Return
 }
 
+; launch or switch to Firefox
+; http://xahlee.info/mswin/autohotkey_switch_launch_app.html
+; Version 2021-02-21 2022-01-19
+launchOrSwitchFirefox()
+{
+if WinExist("ahk_class MozillaWindowClass")
+{
+WinActivateBottom, ahk_class MozillaWindowClass
+}
+Else
+{
+ Run "C:\Program Files\Mozilla Firefox\firefox.exe"
+}
+Return
+}
+
 
 switchToEmacs(){
 IfWinNotExist, ahk_class Emacs
@@ -249,7 +320,20 @@ IfWinExist ahk_exe sm18.exe
 }
 Else
 {
- Run "c:/Users/ppeda/AppData/Local/SuperMemoAssistant/SuperMemoAssistant.exe"
+ Run "C:\SuperMemo\sm18.exe"
+}
+Return
+}
+
+launchOrSwitchDeepl()
+{
+IfWinExist ahk_class HwndWrapper[DeepL.exe;;089bbf13-7ece-44c0-baa9-d55b7b996262]
+{
+ WinActivate, ahk_class HwndWrapper[DeepL.exe;;089bbf13-7ece-44c0-baa9-d55b7b996262]
+}
+Else
+{
+ Run "C:\Users\ppeda\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\DeepL"
 }
 Return
 }
