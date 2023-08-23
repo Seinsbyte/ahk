@@ -51,11 +51,30 @@ $r::Send ^j ;open Downloads
 
 #If mode && WinActive("ahk_exe sm18.exe")
 ; || WinActive("ahk_class TElWind") || WinActive("ahk_exe PluginHost.exe") || WinActive("ahk_class TContents") || WinActive("ahk_class TStats")
+$$::
+Send {AppsKey} ;will change the hook
+Send {c}
+Send {e}
+Sleep, 400
+Send {Enter}
+return
+$!::
+Send !{\}
+Send {Enter}
+return
+$?::
+Send !{.}
+Send {Enter}
+return
 $a:: Send !c ; *A*im at position in tr
 $s:: Send ^t ; Cycle between elements 
 $d:: Send !{PgUp} ;Go to previous position in tree 
 $f:: Send !{PgDn} ;Go to nextposition in tree 
-$g:: Send ^+{Enter} ; *G*ot it all done  
+$g::
+Send ^+{Enter} ; *G*ot it all done
+Send {Enter}
+Send {Enter}
+return
 ; qwert
 $q::Send ^{F7} ;Set read point q
 $w::Send !{F7} ; Go to read point w
@@ -72,6 +91,10 @@ Sleep, 500
 Send ^+{Enter}
 return
 ; $F21::Send ^{Up} ; goto parent
+$z:: Send !z
+$x:: Send !{x}
+$c:: Send ^{c}
+$v:: Send ^{v}
 #If
 
 ;;; Windows Maps
@@ -81,13 +104,15 @@ $F2::Send !{Tab}
 $F3::Send #{Down}
 $F4::Send !{F4}
 ; $F5::launchOrSwitchBrave()
-$F5::launchOrSwitchFirefox()
+; $F5::launchOrSwitchFirefox()
+$F5::launchOrSwitchEdge()
 $F6::launchOrSwitchSupermem()
 ; F7 opens launchy
 $F8::switchToEmacs()
 $F9::switchToFoxit()
 #If mode
 $<::switchToExplorer()
+$>::Send {F13}
 #If
 
 ;;; Emacs maps
@@ -113,6 +138,7 @@ Send, ^{g}
 return
 #If
 
+;;; TreeSheets maps
 
 ;;; Send original key when 'mode' is not true
 #If !mode
@@ -152,6 +178,22 @@ IfWinExist ahk_class Chrome_WidgetWin_1
 Else
 {
  Run "C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+}
+Return
+}
+
+; launch or switch to Edge
+; http://xahlee.info/mswin/autohotkey_switch_launch_app.html
+; version 2021-02-21
+launchOrSwitchEdge()
+{
+IfWinExist ahk_exe msedge.exe
+{
+ WinActivate, ahk_exe msedge.exe
+}
+Else
+{
+ Run ""C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 }
 Return
 }
