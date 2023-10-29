@@ -9,7 +9,6 @@ ringS := "ß"
 send, %ringS%
 return
 
-$F7::Send +!{b}
 ^F6::
 Send ^c                       ; For best compatibility: SendPlay
 Clipboard := StrReplace(Clipboard, "ſ","s")
@@ -108,8 +107,10 @@ $F4::Send !{F4}
 $F5::launchOrSwitchEdge()
 $F6::launchOrSwitchSupermem()
 ; F7 opens launchy
-$F8::switchToEmacs()
-$F9::switchToFoxit()
+; $F8::switchToEmacs()
+$F7::launchOrSwitchEagle()
+$F8::launchOrSwitchVSCode()
+; $F9::switchToFoxit()
 #If mode
 $<::switchToExplorer()
 $>::Send {F13}
@@ -210,6 +211,32 @@ WinActivateBottom, ahk_class MozillaWindowClass
 Else
 {
  Run "C:\Program Files\Mozilla Firefox\firefox.exe"
+}
+Return
+}
+
+launchOrSwitchVSCode()
+{
+if WinExist("ahk_exe Code.exe")
+{
+WinActivateBottom, ahk_exe Code.exe
+}
+Else
+{
+ Run "C:\Program Files\Microsoft VS Code\Code.exe"
+}
+Return
+}
+
+launchOrSwitchEagle()
+{
+if WinExist("ahk_exe Eagle.exe")
+{
+WinActivateBottom, ahk_exe Eagle.exe
+}
+Else
+{
+ Run "D:\OneDrive\Eagle\Eagle.exe"
 }
 Return
 }
