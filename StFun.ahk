@@ -34,6 +34,14 @@ Sleep 50                      ; Don't change clipboard while it is pasted! (Slee
    VarSetCapacity(Clip0, 0)      ; Free memory
 Return
 
+#1:: ; Windows+1 for Zoom Out
+    Send, ^{-} ; Ctrl and Minus
+Return
+
+#2:: ; Windows+2 for Zoom In
+    Send, ^{=} ; Ctrl and Equals/Plus
+Return
+
 ;;; Browser MAPS
 #If mode && WinActive("ahk_class MozillaWindowClass") ; WinActive ("ahk_class Chrome_WidgetWin_1")
 $a::Send ^l ;go to Address bar (a)
